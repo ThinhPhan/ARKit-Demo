@@ -74,7 +74,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-//        sceneView.debugOptions = [.showFeaturePoints, .showWorldOrigin]
+        sceneView.debugOptions = [.showFeaturePoints, .showWorldOrigin]
         
         // Enable environment-bases lightning
         sceneView.autoenablesDefaultLighting = true
@@ -85,9 +85,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             self.restartExperience()
         }
         
-//        addBox()
-        
-//        addTapGestureToSceneView()
+        self.setupVideoObserver();
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,7 +115,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     // Override to create and configure nodes for anchors added to the view's session.
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         guard let imageAnchor = anchor as? ARImageAnchor else { return }
-        print("Anchor ID = \(imageAnchor.identifier)")
+        print("Anchor name = \(imageAnchor.name)")
         
         let referenceImage = imageAnchor.referenceImage
         
@@ -155,13 +153,13 @@ class ViewController: UIViewController, ARSCNViewDelegate {
 //            self.highlightDetection(on: mainNode, width: physicalWidth, height: physicalHeight, completionHandler: {
 
                 // Load 3D Model
-                self.display3DModel(on: node, xOffset: physicalWidth, yOffset: physicalHeight)
+            self.display3DModel(on: node, xOffset: physicalWidth, yOffset: physicalHeight, transform: imageAnchor.transform)
 
                 // Introduce virtual content
-                self.displayDetailView(on: node, xOffset: physicalWidth)
+            self.displayDetailView(on: node, xOffset: physicalWidth)
 
                 // Animate the WebView to the right
-                self.displayWebView(on: node, xOffset: physicalWidth)
+            self.displayWebView(on: node, xOffset: physicalWidth)
 
 //            })
         }
@@ -171,6 +169,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             self.statusViewController.cancelAllScheduledMessages()
             self.statusViewController.showMessage("Detected image “\(imageName)”")
         }
+        
     }
     
     var imageHighlightAction: SCNAction {
@@ -184,30 +183,51 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             ])
     }
     
-//    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-//
-//        let node = SCNNode()
-//
-//        if let imageAnchor = anchor as? ARImageAnchor {
-//
-//            let referenceImage = imageAnchor.referenceImage
-//            let physicalWidth = referenceImage.physicalSize.width
-//            let physicalHeight = referenceImage.physicalSize.height
-//
-//            // Create a plane to visualize the initial position of the detected image.
-//            let plane = SCNPlane(width: physicalWidth, height: physicalHeight)
-//            plane.firstMaterial?.diffuse.contents = videoPlayer
-//            self.videoPlayer.play()
-//
-//            let planeNode = SCNNode(geometry: plane)
-//            planeNode.eulerAngles.x = -.pi / 2
-//
-//            node.addChildNode(planeNode)
-//        }
-//
-//        return node
-//
-//    }
+    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+
+        let node = SCNNode()
+
+        if let imageAnchor = anchor as? ARImageAnchor {
+
+            let referenceImage = imageAnchor.referenceImage
+            
+            let imageName = referenceImage.name ?? ""
+            
+            let player = self.players[imageName]!
+            
+            let physicalWidth = referenceImage.physicalSize.width
+            let physicalHeight = referenceImage.physicalSize.height
+
+            // Create a plane to visualize the initial position of the detected image.
+            let plane = SCNPlane(width: physicalWidth, height: physicalHeight)
+            plane.firstMaterial?.diffuse.contents = player
+            player.play()
+
+            let planeNode = SCNNode(geometry: plane)
+            planeNode.eulerAngles.x = -.pi / 2
+
+            node.addChildNode(planeNode)
+        }
+
+        return node
+
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        guard let imageAnchor = anchor as? ARImageAnchor else {
+            return
+        }
+        
+        if let pointOfView = sceneView.pointOfView {
+            let isVisible = sceneView.isNode(node, insideFrustumOf: pointOfView)
+            if isVisible {
+                let player = players[imageAnchor.name!]!
+                if player.rate == 0 {
+                    player.play()
+                }
+            }
+        }
+    }
     
     // MARK: - Session management (Image detection setup)
     
@@ -270,19 +290,38 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     // MARK: - Virtual Contents
     
-    func display3DModel(on rootNode: SCNNode, xOffset: CGFloat, yOffset: CGFloat) {
-//        let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
-//
-//        let boxNode = SCNNode(geometry: box)
-//        boxNode.position = SCNVector3Zero
-//        boxNode.eulerAngles.x = -.pi / 2
-//
-//        rootNode.addChildNode(boxNode)
+    /// 3D Model Loading and Scaling.
+    ///
+    /// - Parameters:
+    ///   - rootNode: SCNNode root to add
+    ///   - xOffset: x Axis offset - default is width of Image Anchor
+    ///   - yOffset: y Axis offset - default is height of Image Anchor
+    func display3DModel(on rootNode: SCNNode, xOffset: CGFloat, yOffset: CGFloat, transform: simd_float4x4) {
         
+        /*
+        let box = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
+
+        let boxNode = SCNNode(geometry: box)
+        boxNode.position = SCNVector3Zero
+        boxNode.eulerAngles.x = -.pi / 2
+
+        rootNode.addChildNode(boxNode)
+        */
+ 
         // Ship Scene
         let shipScene = SCNScene(named: "art.scnassets/ship.scn")!
         
         let shipNode = shipScene.rootNode.childNode(withName: "ship", recursively: true)!
+        
+//        print("shipNode - Postion: \(shipNode.simdWorldPosition), Orientation: \(shipNode.simdWorldOrientation), Transform: \(shipNode.simdWorldTransform)")
+        
+        print("rootNode - Postion: \(rootNode.simdWorldPosition), Orientation: \(rootNode.simdWorldOrientation), Transform: \(rootNode.simdWorldTransform)")
+        
+        print("transform: \(transform)")
+        
+        if simd_equal(rootNode.simdWorldTransform, transform) {
+            print("rootNode = transform position")
+        }
         
         // 2. Calculate size based on planeNode's bounding box.
         let (min, max) = shipNode.boundingBox
@@ -296,8 +335,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         let finalRatio = [widthRatio, heightRatio].min()!
         
         // 4. Set transform from imageAnchor data.
-//        shipNode.transform = SCNMatrix4(imageAnchor.transform)
-//        shipNode.transform = rootNode.transform
+//        shipNode.transform = SCNMatrix4(transform)
+        shipNode.simdWorldPosition = rootNode.simdWorldPosition
+        shipNode.simdWorldOrientation = rootNode.simdWorldOrientation
+        shipNode.simdWorldTransform = rootNode.simdWorldTransform
         
         // 5. Animate appearance by scaling model from 0 to previously calculated value.
         let appearanceAction = SCNAction.scale(to: CGFloat(finalRatio), duration: 0.4)
@@ -307,9 +348,9 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         shipNode.scale = SCNVector3(0.15, 0.15, 0.15)
         
         // NOTICE: No need, Convert SpriteKitScene coordinate -> ARKit Coordinate
-//        shipNode.eulerAngles.x = -.pi / 2
+        shipNode.eulerAngles.x = -.pi / 2
         shipNode.position = SCNVector3Zero
-        shipNode.position.z = 0.05
+//        shipNode.position.z = 0.05
         
 //        let rotationAction = SCNAction.rotateBy(x: 0, y: 0.5, z: 0, duration: 1)
 //        let infitieAction = SCNAction.repeatForever(rotationAction)
@@ -325,7 +366,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         detailSKScene?.isPaused = false
         
         // Create a plane
-        let detailPlane = SCNPlane(width: xOffset, height: xOffset * 1.4)
+        let detailPlane = SCNPlane(width: xOffset * 1.2, height: xOffset * 1.5)
         detailPlane.firstMaterial?.diffuse.contents = detailSKScene
         // Due to the origin of the iOS coordinate system, SCNMaterial's content appears upside down, so flip the y-axis.
         detailPlane.firstMaterial?.diffuse.contentsTransform = SCNMatrix4Translate(SCNMatrix4MakeScale(1, -1, 1), 0, 1, 0)
@@ -359,11 +400,10 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             
             let webViewPlane = SCNPlane(width: xOffset, height: xOffset * 1.4)
 //            webViewPlane.cornerRadius = 0.25
+            // Set the web view as webViewPlane's primary texture
+            webViewPlane.firstMaterial?.diffuse.contents = webView
             
             let webViewNode = SCNNode(geometry: webViewPlane)
-            
-            // Set the web view as webViewPlane's primary texture
-            webViewNode.geometry?.firstMaterial?.diffuse.contents = webView
             webViewNode.eulerAngles.x = -.pi / 2
             webViewNode.opacity = 0
             
@@ -403,18 +443,11 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     /// MARK: - Video Player
     
     // Load video and create video player
-    let videoPlayer : AVPlayer = {
-        // Load cat video from bundle
-        guard let url = Bundle.main.url(forResource: "video", withExtension: "mp4") else {
-            print("Could not find video file.")
-            return AVPlayer()
-        }
-        return AVPlayer(url: url)
-    }()
     
-//    let players = [
-//        "": videoplayer
-//    ];
+    let players = [
+        "elephant": AVPlayer(url: Bundle.main.url(forResource: "piggy", withExtension: "mp4")!),
+        "iphone-5.5": AVPlayer(url: Bundle.main.url(forResource: "rose", withExtension: "mp4")!)
+    ];
     
     func videoObserver(for videoPlayer: AVPlayer) {
         NotificationCenter.default.addObserver(
@@ -424,6 +457,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             using: {
                 notification in videoPlayer.seek(to: CMTime.zero)
         })
+    }
+    
+    func setupVideoObserver() {
+        for (_, player) in players {
+            videoObserver(for: player)
+        }
     }
 }
 

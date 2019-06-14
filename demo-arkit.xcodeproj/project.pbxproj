@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F774E45722B3B7420009617F /* rose.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F774E45622B3B7420009617F /* rose.mp4 */; };
+		F774E45922B3B7580009617F /* piggy.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F774E45822B3B7580009617F /* piggy.mp4 */; };
 		F79FA77722B1F86700FD7A0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79FA77622B1F86700FD7A0B /* AppDelegate.swift */; };
 		F79FA77B22B1F86700FD7A0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79FA77A22B1F86700FD7A0B /* ViewController.swift */; };
 		F79FA77E22B1F86700FD7A0B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F79FA77C22B1F86700FD7A0B /* Main.storyboard */; };
@@ -38,6 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F774E45622B3B7420009617F /* rose.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = rose.mp4; sourceTree = "<group>"; };
+		F774E45822B3B7580009617F /* piggy.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = piggy.mp4; sourceTree = "<group>"; };
 		F79FA77322B1F86700FD7A0B /* demo-arkit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "demo-arkit.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F79FA77622B1F86700FD7A0B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F79FA77822B1F86700FD7A0B /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -140,6 +144,8 @@
 		F79FA7AA22B2CC2300FD7A0B /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F774E45822B3B7580009617F /* piggy.mp4 */,
+				F774E45622B3B7420009617F /* rose.mp4 */,
 				F79FA7AB22B2CCAE00FD7A0B /* DetailScene.sks */,
 			);
 			path = Resources;
@@ -253,6 +259,8 @@
 				F79FA7A822B259D300FD7A0B /* Assets.xcassets in Resources */,
 				F79FA7AC22B2CCAE00FD7A0B /* DetailScene.sks in Resources */,
 				F79FA78322B1F86A00FD7A0B /* LaunchScreen.storyboard in Resources */,
+				F774E45922B3B7580009617F /* piggy.mp4 in Resources */,
+				F774E45722B3B7420009617F /* rose.mp4 in Resources */,
 				F79FA77E22B1F86700FD7A0B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
