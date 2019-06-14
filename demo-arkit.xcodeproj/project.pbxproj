@@ -8,13 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		F79FA77722B1F86700FD7A0B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79FA77622B1F86700FD7A0B /* AppDelegate.swift */; };
-		F79FA77922B1F86700FD7A0B /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = F79FA77822B1F86700FD7A0B /* art.scnassets */; };
 		F79FA77B22B1F86700FD7A0B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79FA77A22B1F86700FD7A0B /* ViewController.swift */; };
 		F79FA77E22B1F86700FD7A0B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F79FA77C22B1F86700FD7A0B /* Main.storyboard */; };
-		F79FA78022B1F86A00FD7A0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F79FA77F22B1F86A00FD7A0B /* Assets.xcassets */; };
 		F79FA78322B1F86A00FD7A0B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F79FA78122B1F86A00FD7A0B /* LaunchScreen.storyboard */; };
 		F79FA78E22B1F86A00FD7A0B /* demo_arkitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79FA78D22B1F86A00FD7A0B /* demo_arkitTests.swift */; };
 		F79FA79922B1F86A00FD7A0B /* demo_arkitUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79FA79822B1F86A00FD7A0B /* demo_arkitUITests.swift */; };
+		F79FA7A722B235B300FD7A0B /* StatusViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79FA7A622B235B300FD7A0B /* StatusViewController.swift */; };
+		F79FA7A822B259D300FD7A0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F79FA77F22B1F86A00FD7A0B /* Assets.xcassets */; };
+		F79FA7A922B271BD00FD7A0B /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = F79FA77822B1F86700FD7A0B /* art.scnassets */; };
+		F79FA7AC22B2CCAE00FD7A0B /* DetailScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = F79FA7AB22B2CCAE00FD7A0B /* DetailScene.sks */; };
+		F79FA7B022B2D83E00FD7A0B /* ViewController+ARSessionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F79FA7AF22B2D83E00FD7A0B /* ViewController+ARSessionDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +52,9 @@
 		F79FA79422B1F86A00FD7A0B /* demo-arkitUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "demo-arkitUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F79FA79822B1F86A00FD7A0B /* demo_arkitUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = demo_arkitUITests.swift; sourceTree = "<group>"; };
 		F79FA79A22B1F86A00FD7A0B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F79FA7A622B235B300FD7A0B /* StatusViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewController.swift; sourceTree = "<group>"; };
+		F79FA7AB22B2CCAE00FD7A0B /* DetailScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = DetailScene.sks; sourceTree = "<group>"; };
+		F79FA7AF22B2D83E00FD7A0B /* ViewController+ARSessionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ViewController+ARSessionDelegate.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,10 +105,13 @@
 		F79FA77522B1F86700FD7A0B /* demo-arkit */ = {
 			isa = PBXGroup;
 			children = (
+				F79FA7AA22B2CC2300FD7A0B /* Resources */,
 				F79FA77622B1F86700FD7A0B /* AppDelegate.swift */,
-				F79FA77822B1F86700FD7A0B /* art.scnassets */,
 				F79FA77A22B1F86700FD7A0B /* ViewController.swift */,
+				F79FA7AF22B2D83E00FD7A0B /* ViewController+ARSessionDelegate.swift */,
+				F79FA7A622B235B300FD7A0B /* StatusViewController.swift */,
 				F79FA77C22B1F86700FD7A0B /* Main.storyboard */,
+				F79FA77822B1F86700FD7A0B /* art.scnassets */,
 				F79FA77F22B1F86A00FD7A0B /* Assets.xcassets */,
 				F79FA78122B1F86A00FD7A0B /* LaunchScreen.storyboard */,
 				F79FA78422B1F86A00FD7A0B /* Info.plist */,
@@ -126,6 +135,14 @@
 				F79FA79A22B1F86A00FD7A0B /* Info.plist */,
 			);
 			path = "demo-arkitUITests";
+			sourceTree = "<group>";
+		};
+		F79FA7AA22B2CC2300FD7A0B /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F79FA7AB22B2CCAE00FD7A0B /* DetailScene.sks */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -232,9 +249,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F79FA77922B1F86700FD7A0B /* art.scnassets in Resources */,
+				F79FA7A922B271BD00FD7A0B /* art.scnassets in Resources */,
+				F79FA7A822B259D300FD7A0B /* Assets.xcassets in Resources */,
+				F79FA7AC22B2CCAE00FD7A0B /* DetailScene.sks in Resources */,
 				F79FA78322B1F86A00FD7A0B /* LaunchScreen.storyboard in Resources */,
-				F79FA78022B1F86A00FD7A0B /* Assets.xcassets in Resources */,
 				F79FA77E22B1F86700FD7A0B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -261,6 +279,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				F79FA77B22B1F86700FD7A0B /* ViewController.swift in Sources */,
+				F79FA7B022B2D83E00FD7A0B /* ViewController+ARSessionDelegate.swift in Sources */,
+				F79FA7A722B235B300FD7A0B /* StatusViewController.swift in Sources */,
 				F79FA77722B1F86700FD7A0B /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -374,6 +394,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -428,6 +449,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -437,7 +459,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y5Q4R75WDP;
 				INFOPLIST_FILE = "demo-arkit/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -454,7 +478,9 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y5Q4R75WDP;
 				INFOPLIST_FILE = "demo-arkit/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
